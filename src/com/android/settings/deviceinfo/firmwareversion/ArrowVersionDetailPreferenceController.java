@@ -42,8 +42,7 @@ public class ArrowVersionDetailPreferenceController extends BasePreferenceContro
     private static final int ACTIVITY_TRIGGER_COUNT = 3;
 
     private static final String KEY_ARROW_VERSION_PROP = "ro.modversion";
-    private static final String KEY_ARROW_RELEASETYPE_PROP = "ro.arrow.releasetype";
-    private static final String KEY_ARROW_ZIPTYPE_PROP = "ro.arrow.ziptype";
+    private static final String KEY_ARROW_TYPE_PROP = "ro.arrow.type";
 
     private final UserManager mUserManager;
     private final long[] mHits = new long[ACTIVITY_TRIGGER_COUNT];
@@ -64,14 +63,17 @@ public class ArrowVersionDetailPreferenceController extends BasePreferenceContro
 
     @Override
     public CharSequence getSummary() {
-	String[] arrowVer = SystemProperties.get(KEY_ARROW_VERSION_PROP).split("v");
-	String arrowReleasetype =  SystemProperties.get(KEY_ARROW_RELEASETYPE_PROP);
-        String arrowZiptype =  SystemProperties.get(KEY_ARROW_ZIPTYPE_PROP);
+	String arrowVer = SystemProperties.get(KEY_ARROW_VERSION_PROP);
+	String arrowType =  SystemProperties.get(KEY_ARROW_TYPE_PROP);
 
-	if (!arrowVer[1].isEmpty() && !arrowReleasetype.isEmpty() && !arrowZiptype.isEmpty())
-	    return arrowVer[1] + " | " + arrowZiptype + " | " + arrowReleasetype;
-	else
-            return mContext.getString(R.string.unknown);
+	// Convert property values ​​to uppercase
+    String capitalizedModVer = !arrowVer.isEmpty() ? arrowVer.toUpperCase() : "";
+    String capitalizedType = !arrowType.isEmpty() ? arrowType.toUpperCase() : "";
+
+    if (!capitalizedModVer.isEmpty() && !capitalizedType.isEmpty())
+        return capitalizedModVer + " - " + capitalizedType;
+    else
+        return mContext.getString(R.string.unknown);
     }
 
     @Override
